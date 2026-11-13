@@ -3,7 +3,7 @@
 声音落成墨迹。搜狗 E1 录音笔 + Mac 本地转写 + 钉钉/飞书双平台分发的私有化会议记录方案。
 音频不出本机，运行成本 ¥0。基于 [E1Recorder](https://github.com/seabird000/E1Recorder)（MIT）二次开发。
 
-- App 派生仓库：[tingmo-app](https://github.com/vincent0229/tingmo-app)（私有）
+- `app/`：听墨 App 源码（E1Recorder MIT 派生，subtree 并入，含上游历史；上游更新用 `git subtree pull --prefix=app upstream main`）
 
 ## 结构
 
@@ -15,6 +15,7 @@
 | `方案设计与功能扩展.md` | 六层架构设计 + 社区玩法评估 |
 | `E1功能全景研究.md` | 硬件能力底牌 + 8 类 28 项功能全景 |
 | `models/` | 本地模型（git 忽略，从 ModelScope 下载） |
+| `app/` | 听墨 App 源码（Swift/SwiftPM，构建见 app/build.sh） |
 | `E1Recorder/` | 上游参考克隆（git 忽略） |
 
 ## 快速开始
