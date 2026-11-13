@@ -8,8 +8,8 @@ APP="build/$NAME.app"
 
 # PREVIEW=1 ./build.sh makes a build whose screenshot mode (-uiPreview YES …) works; release builds leave it out.
 FLAGS=(); [ "${PREVIEW:-0}" = "1" ] && FLAGS=(-Xswiftc -DE1_PREVIEW)
-swift build -c release --arch arm64 --arch x86_64 ${FLAGS[@]+"${FLAGS[@]}"}
-BIN="$(swift build -c release --arch arm64 --arch x86_64 ${FLAGS[@]+"${FLAGS[@]}"} --show-bin-path)/E1Recorder"
+swift build -c release --arch arm64 ${FLAGS[@]+"${FLAGS[@]}"}
+BIN="$(swift build -c release --arch arm64 ${FLAGS[@]+"${FLAGS[@]}"} --show-bin-path)/E1Recorder"
 
 rm -rf build && mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN" "$APP/Contents/MacOS/E1Recorder"
