@@ -1,0 +1,18 @@
+# 白名单：只上传应用源码和笔端脚本。
+# 录音、笔的完整备份（含搜狗固件镜像）、调试工具一律不进仓库。
+/*
+!/.gitignore
+!/README.md
+!/CHANGELOG.md
+!/LICENSE
+!/app/
+!/pen/
+!/docs/
+
+/app/.build/
+/app/build/
+/app/screenshots/
+/app/*.md
+.DS_Store
+/pen/e1wifi/build/
+/app/.signing-identity
