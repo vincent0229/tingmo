@@ -80,7 +80,7 @@ struct WelcomeView: View {
     @State private var editingAppId = false
     @State private var page = ["pen": 0, "platform": 1, "wifi": 2][UserDefaults.standard.string(forKey: "previewPage") ?? ""] ?? 0
 
-    private let titles = ["欢迎使用 E1录音助手", "转写与纪要", "WiFi 无线同步（可选）"]
+    private let titles = ["欢迎使用 听墨", "转写与纪要", "WiFi 无线同步（可选）"]
     private let subtitles = [
         "先让这台 Mac 认出录音笔，并在笔上装好校时脚本。之后插上录音笔就会自动拷贝录音。",
         "录音在云端转写，生成的会议纪要存进你的笔记库。",

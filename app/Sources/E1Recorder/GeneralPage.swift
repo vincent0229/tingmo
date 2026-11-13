@@ -54,7 +54,7 @@ struct GeneralPage: View {
     private func exportConfig() {
         NSApp.activate(ignoringOtherApps: true)
         let p = NSSavePanel()
-        p.nameFieldStringValue = "E1录音助手配置.json"
+        p.nameFieldStringValue = "听墨配置.json"
         if p.runModal() == .OK, let u = p.url {
             do { try s.exportConfig(to: u); msg = "已导出" } catch { msg = error.localizedDescription }
         }

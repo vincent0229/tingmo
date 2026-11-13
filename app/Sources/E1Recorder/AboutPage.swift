@@ -29,7 +29,7 @@ struct AboutPage: View {
                     Button("打开…") { NSWorkspace.shared.open(AppLinks.repo) }
                 } label: {
                     Text("项目主页")
-                    Text("github.com/seabird000/E1Recorder")
+                    Text("github.com/vincent0229/tingmo-app")
                 }
                 LabeledContent("数据目录") {
                     Button("在访达中显示") {
@@ -40,14 +40,14 @@ struct AboutPage: View {
             } header: {
                 VStack(spacing: 4) {
                     Image(nsImage: NSApp.applicationIconImage).resizable().frame(width: 64, height: 64)
-                    Text("E1录音助手").font(.title3.weight(.semibold)).foregroundStyle(.primary).padding(.top, 6)
-                    Text("让搜狗 E1 录音笔在官方停服后继续可用：自动拷贝录音、云端转写，整理成会议纪要。")
+                    Text("听墨").font(.title3.weight(.semibold)).foregroundStyle(.primary).padding(.top, 6)
+                    Text("声音落成墨迹。搜狗 E1 录音笔的私有化转写工作站：本地转写、本地纪要，音频不出本机。")
                         .font(.callout).fontWeight(.regular).foregroundStyle(.secondary).multilineTextAlignment(.center)
                         .frame(maxWidth: 380).padding(.top, 2).padding(.bottom, 14)
                 }
                 .frame(maxWidth: .infinity)
             } footer: {
-                Text("MIT 许可 · 内置 adb（Apache-2.0）")
+                Text("MIT 许可 · 基于 E1Recorder (MIT) © seabird000 · 内置 adb（Apache-2.0）")
                     .foregroundStyle(.secondary).frame(maxWidth: .infinity, alignment: .leading).multilineTextAlignment(.leading)
             }
         }

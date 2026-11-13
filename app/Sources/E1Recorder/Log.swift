@@ -21,7 +21,7 @@ enum Diagnostics {
         var out: [String] = []
         func line(_ k: String, _ v: Any?) { out.append("\(k)：\(v.map { "\($0)" } ?? "—")") }
         let os = ProcessInfo.processInfo.operatingSystemVersion
-        out.append("E1录音助手 诊断信息 · " + DateFormatter.cached("yyyy-MM-dd HH:mm").string(from: Date()))
+        out.append("听墨 诊断信息 · " + DateFormatter.cached("yyyy-MM-dd HH:mm").string(from: Date()))
         out.append("")
         line("应用版本", AppLinks.version)
         line("上传程序（内置）", Bundled.uploaderVersion)
@@ -102,7 +102,7 @@ enum Diagnostics {
     static func export() {
         NSApp.activate(ignoringOtherApps: true)
         let panel = NSSavePanel()
-        panel.nameFieldStringValue = "E1录音助手诊断信息.txt"
+        panel.nameFieldStringValue = "听墨诊断信息.txt"
         guard panel.runModal() == .OK, let url = panel.url else { return }
         try? report(AppSettings.shared, Pipeline.shared).write(to: url, atomically: true, encoding: .utf8)
         NSWorkspace.shared.activateFileViewerSelecting([url])

@@ -3,7 +3,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 VERSION="${VERSION:-1.3.2}"
-NAME="E1录音助手"
+NAME="听墨"
 APP="build/$NAME.app"
 
 # PREVIEW=1 ./build.sh makes a build whose screenshot mode (-uiPreview YES …) works; release builds leave it out.
@@ -30,15 +30,20 @@ cp ../pen/e1sync.sh ../pen/auto_reboot.sh "$APP/Contents/Resources/"
 cp ../pen/e1wifi/build/e1wifi-arm64 "$APP/Contents/Resources/"
 WIFI_VERSION="$(grep -o 'const version = "[^"]*"' ../pen/e1wifi/main.go | cut -d'"' -f2)"
 # App icon: Icon Composer file → Assets.car (macOS 26+ glass icon) + AppIcon.icns (older systems)
-xcrun actool "$PWD/Resources/AppIcon.icon" --compile "$PWD/$APP/Contents/Resources" --platform macosx \
-  --minimum-deployment-target 15.0 --app-icon AppIcon --output-partial-info-plist "$PWD/build/icon-partial.plist" >/dev/null
-rm -f build/icon-partial.plist
+# 听墨 fork: 无完整 Xcode（仅 CLT）时 actool 不可用，跳过图标编译，回退系统默认图标
+if xcrun --find actool >/dev/null 2>&1; then
+  xcrun actool "$PWD/Resources/AppIcon.icon" --compile "$PWD/$APP/Contents/Resources" --platform macosx \
+    --minimum-deployment-target 15.0 --app-icon AppIcon --output-partial-info-plist "$PWD/build/icon-partial.plist" >/dev/null
+  rm -f build/icon-partial.plist
+else
+  echo "actool 不可用（需要完整 Xcode），跳过图标编译"
+fi
 
 cat > "$APP/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
-  <key>CFBundleIdentifier</key><string>app.e1recorder.mac</string>
+  <key>CFBundleIdentifier</key><string>app.tingmo.mac</string>
   <key>CFBundleDevelopmentRegion</key><string>zh-Hans</string>
   <key>CFBundleLocalizations</key><array><string>zh-Hans</string></array>
   <key>CFBundleName</key><string>$NAME</string>
@@ -65,7 +70,7 @@ PLIST
 
 # Declare Chinese so system panels (Finder open/save dialogs, menus) appear in Chinese
 mkdir -p "$APP/Contents/Resources/zh-Hans.lproj"
-printf '"CFBundleDisplayName" = "E1录音助手";\n"CFBundleName" = "E1录音助手";\n' > "$APP/Contents/Resources/zh-Hans.lproj/InfoPlist.strings"
+printf '"CFBundleDisplayName" = "听墨";\n"CFBundleName" = "听墨";\n' > "$APP/Contents/Resources/zh-Hans.lproj/InfoPlist.strings"
 
 # Signing: with a local self-signed "E1Recorder Local Signing" certificate (made once in Keychain Access ›
 # Certificate Assistant › Create a Certificate…, type "Code Signing") every build keeps the same identity, so macOS

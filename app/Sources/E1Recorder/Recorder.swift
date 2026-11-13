@@ -219,7 +219,7 @@ final class MacRecorder: NSObject, ObservableObject {
         NSApp.activate(ignoringOtherApps: true)
         let a = NSAlert()
         a.messageText = "需要麦克风权限"
-        a.informativeText = "请在「系统设置 › 隐私与安全性 › 麦克风」里打开「E1录音助手」，然后再点一次录音。"
+        a.informativeText = "请在「系统设置 › 隐私与安全性 › 麦克风」里打开「听墨」，然后再点一次录音。"
         a.addButton(withTitle: "打开系统设置")
         a.addButton(withTitle: "取消")
         if a.runModal() == .alertFirstButtonReturn,

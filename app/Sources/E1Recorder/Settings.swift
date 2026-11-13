@@ -43,11 +43,11 @@ struct PlatformInfo {
 }
 
 enum AppLinks {
-    static let repo = URL(string: "https://github.com/seabird000/E1Recorder")!
-    static let releases = URL(string: "https://github.com/seabird000/E1Recorder/releases")!
-    static let issues = URL(string: "https://github.com/seabird000/E1Recorder/issues/new")!
-    static let license = URL(string: "https://github.com/seabird000/E1Recorder/blob/main/LICENSE")!
-    static let latestAPI = URL(string: "https://api.github.com/repos/seabird000/E1Recorder/releases/latest")!
+    static let repo = URL(string: "https://github.com/vincent0229/tingmo-app")!
+    static let releases = URL(string: "https://github.com/vincent0229/tingmo-app/releases")!
+    static let issues = URL(string: "https://github.com/vincent0229/tingmo-app/issues/new")!
+    static let license = URL(string: "https://github.com/vincent0229/tingmo-app/blob/main/LICENSE")!
+    static let latestAPI = URL(string: "https://api.github.com/repos/vincent0229/tingmo-app/releases/latest")!
     static let buildMonth = "2026 年 11 月"
     static var version: String { Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "开发版" }
 }
@@ -458,7 +458,7 @@ enum Keychain {
         if status == errSecItemNotFound {
             var q = query(account)
             q[kSecValueData as String] = data
-            q[kSecAttrLabel as String] = "E1录音助手 访问密钥"
+            q[kSecAttrLabel as String] = "听墨 访问密钥"
             return SecItemAdd(q as CFDictionary, nil) == errSecSuccess
         }
         return status == errSecSuccess
