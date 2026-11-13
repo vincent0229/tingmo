@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "status": "example",
+  "mode": "self_only_with_suggestions",
+  "delivery": {
+    "dingtalk": "本人私信（纪要链接+待办）",
+    "feishu": "应用bot发给本人（纪要链接+任务）",
+    "auto_group_send": false,
+    "note": "所有纪要只推本人，由本人选择性转发到群；不做任何自动群发"
+  },
+  "suggestions": {
+    "note": "仅用于在消息里附一行「建议转发：XX群」提示，不执行发送。以下为示例，替换为你的真实群（ID 用 dws chat +my-groups / lark-cli im chats list 获取）",
+    "match_source": "AI标题+纪要关键词字段+正文；建议可用本地 LLM 对候选群做分类+置信度，低置信不附提示；匹配不上就不附",
+    "todo_policy": "推送层二次解析行动项角色：主导或配合（负责人=我）→ 建待办，配合项加[配合]前缀；他人主导且无需我配合 → 只留纪要",
+    "rules": [
+      {"keywords": ["客户A", "项目A"], "platform": "dingtalk", "groups": ["客户A交付群（示例）"]},
+      {"keywords": ["客户B"], "platform": "dingtalk", "groups": ["客户B技术支持群（示例）"]},
+      {"keywords": ["内部项目X"], "platform": "dingtalk", "groups": ["内部项目X群（示例）"]},
+      {"keywords": ["研发周会"], "platform": "feishu", "groups": ["研发中心（示例）"]},
+      {"keywords": ["董事会"], "platform": "feishu", "groups": ["董事会（示例）"]}
+    ]
+  }
+}

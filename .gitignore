@@ -1,0 +1,26 @@
+# 大模型与二进制（永不入库）
+models/
+*.bin
+*.dmg
+*.gguf
+
+# 音频（隐私：真实录音绝不入库）
+*.wav
+*.aiff
+*.m4a
+*.mp3
+*.aac
+
+# 上游参考克隆（独立仓库，fork 时另建）
+E1Recorder/
+
+# 授权二维码等临时敏感产物
+feishu-auth-qrcode.png
+
+# 构建与系统产物
+build/
+__pycache__/
+*.pyc
+.DS_Store
+nohup.out
+*.log
