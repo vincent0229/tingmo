@@ -64,16 +64,13 @@ struct SettingsView: View {
     @State private var index = -1
     @State private var jumping = false
 
-    private static let subTitles = ["platform-settings": "服务选项"]
+    private static let subTitles = ["platform-settings": "服务选项", "about": "关于"]
 
     var body: some View {
         NavigationSplitView {
             List(selection: $selection) {
                 Section {
-                    ForEach([SettingsSection.platform, .storage, .device, .general, .push]) { row($0) }
-                }
-                Section {
-                    row(.about)
+                    ForEach([SettingsSection.device, .platform, .storage, .push, .general]) { row($0) }
                 }
             }
             .listStyle(.sidebar)
@@ -137,6 +134,7 @@ struct SettingsView: View {
     @ViewBuilder private func subpage(_ id: String) -> some View {
         switch id {
         case "platform-settings": PlatformSettingsPage()
+        case "about": AboutPage()
         default: page(selection ?? .platform)
         }
     }

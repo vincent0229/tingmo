@@ -6,6 +6,7 @@ struct GeneralPage: View {
     @EnvironmentObject var s: AppSettings
     @EnvironmentObject var pipeline: Pipeline
     @Environment(\.openWindow) private var openWindow
+    @Environment(\.openSubpage) private var openSubpage
     @State private var msg = ""
 
     var body: some View {
@@ -47,6 +48,12 @@ struct GeneralPage: View {
                     .help("遇到问题时导出一份运行情况，方便排查；不含密钥、录音标题和网络名称")
             } header: {
                 SectionTitle("配置迁移", info: "换电脑：在新电脑安装本应用 → 导入配置 → 按提示填写访问密钥。导出内容包括平台、模型、应用编号、接口地址、热词、模板与目录、云存储、发言人和地点；访问密钥与钥匙只在钥匙串里，不导出。")
+            }
+
+            Section {
+                LabeledContent("关于听墨") { Button("打开…") { openSubpage("about") } }
+            } header: {
+                Text("关于")
             }
         }
     }
