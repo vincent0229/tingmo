@@ -182,7 +182,8 @@ final class AppSettings: ObservableObject {
         customEndpoint = d.string(forKey: "customEndpoint") ?? "https://api.openai.com/v1"
         customASRModel = d.string(forKey: "customASRModel") ?? "whisper-1"
         customLLMModel = d.string(forKey: "customLLMModel") ?? "gpt-4o-mini"
-        menuIcon = d.string(forKey: "menuIcon") ?? "bars"
+        let savedIcon = d.string(forKey: "menuIcon") ?? "logo"
+        menuIcon = (savedIcon == "ring" || savedIcon == "bars") ? "logo" : savedIcon
         openInObsidian = d.object(forKey: "openInObsidian") as? Bool ?? true
         budgetYuan = d.object(forKey: "budgetYuan") as? Int ?? 50
         hotwords = d.string(forKey: "hotwords") ?? ""

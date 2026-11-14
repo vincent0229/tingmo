@@ -15,12 +15,12 @@ struct GeneralPage: View {
                 Toggle("开机启动", isOn: Binding(get: { s.launchAtLogin }, set: { s.launchAtLogin = $0 })).toggleStyle(.switch)
                 Picker("菜单图标", selection: $s.menuIcon) {
                     ForEach(MenuBarIcon.styles, id: \.id) { st in
-                        Label { Text(st.name) } icon: { Image(nsImage: MenuBarIcon.idle(st.id)) }.tag(st.id)
+                        Image(nsImage: MenuBarIcon.idle(st.id)).tag(st.id)
                     }
                 }
                 LabeledContent("使用引导") { Button("打开…") { NSApp.activate(ignoringOtherApps: true); openWindow(id: "welcome") } }
             } header: {
-                Text("启动选项")
+                Text("启动")
             }
 
             Section {
@@ -36,7 +36,7 @@ struct GeneralPage: View {
                     }
                 }
             } header: {
-                SectionTitle("同步通道", info: "插着数据线时走 USB；拔掉后，设置了 WiFi 同步的录音笔联网会自动上传。两者都没有时显示「未连接」，录音留在笔里，下次补传。")
+                SectionTitle("通道", info: "插着数据线时走 USB；拔掉后，设置了 WiFi 同步的录音笔联网会自动上传。两者都没有时显示「未连接」，录音留在笔里，下次补传。")
             }
 
             Section {
@@ -47,7 +47,7 @@ struct GeneralPage: View {
                 LabeledContent("诊断信息") { Button("导出…") { Diagnostics.export() } }
                     .help("遇到问题时导出一份运行情况，方便排查；不含密钥、录音标题和网络名称")
             } header: {
-                SectionTitle("配置迁移", info: "换电脑：在新电脑安装本应用 → 导入配置 → 按提示填写访问密钥。导出内容包括平台、模型、应用编号、接口地址、热词、模板与目录、云存储、发言人和地点；访问密钥与钥匙只在钥匙串里，不导出。")
+                SectionTitle("配置", info: "换电脑：在新电脑安装本应用 → 导入配置 → 按提示填写访问密钥。导出内容包括平台、模型、应用编号、接口地址、热词、模板与目录、云存储、发言人和地点；访问密钥与钥匙只在钥匙串里，不导出。")
             }
 
             Section {

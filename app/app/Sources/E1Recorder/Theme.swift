@@ -342,10 +342,10 @@ struct PenGlyph: View {
     }
 }
 
-/// Monochrome template images for the menu bar (dark menu bars invert them automatically). Three styles:
-/// "ring" 声纹录音键 (same as the app icon), "bars" 声波, "pen" 录音笔.
+/// Monochrome template images for the menu bar (dark menu bars invert them automatically). Two styles:
+/// "logo" 听墨标识（声波+笔锋墨滴）, "pen" 录音笔.
 enum MenuBarIcon {
-    static let styles: [(id: String, name: String)] = [("ring", "声纹录音键"), ("bars", "声波"), ("pen", "录音笔")]
+    static let styles: [(id: String, name: String)] = [("logo", "听墨"), ("pen", "录音笔")]
 
     private static let ringPattern: [CGFloat] = [1.2, 2.0, 2.8, 1.7, 1.0, 1.5, 2.5, 3.0, 2.0, 1.2, 1.7, 2.3, 1.3, 2.1, 2.7, 1.6, 1.0, 1.6]
     private static let barFrames: [[CGFloat]] = [[4, 9, 13, 7, 3], [9, 4, 7, 13, 6], [13, 7, 4, 9, 11], [7, 13, 9, 4, 7]]
@@ -361,6 +361,13 @@ enum MenuBarIcon {
         let img = NSImage(size: NSSize(width: dot ? 19 : 16, height: 16), flipped: true) { _ in
             NSColor.black.set()
             switch style {
+            case "logo":
+                let h = barFrames[frame % barFrames.count]
+                for (i, x) in ([1.2, 3.6, 6.0, 8.4] as [CGFloat]).enumerated() {
+                    NSBezierPath(roundedRect: NSRect(x: x, y: 7.5 - h[i] / 2, width: 1.6, height: h[i]), xRadius: 0.8, yRadius: 0.8).fill()
+                }
+                NSBezierPath(roundedRect: NSRect(x: 11.0, y: 1.5, width: 2.2, height: 9.0), xRadius: 1.1, yRadius: 1.1).fill()
+                NSBezierPath(ovalIn: NSRect(x: 10.9, y: 12.0, width: 2.4, height: 2.4)).fill()
             case "bars":
                 let h = barFrames[frame % barFrames.count]
                 for (i, x) in ([1.2, 4.4, 7.6, 10.8, 14] as [CGFloat]).enumerated() {
