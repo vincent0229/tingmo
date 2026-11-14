@@ -1,11 +1,14 @@
 import Foundation
-import AuthenticationServices
+import Network
 import AppKit
 
 /// 飞书原生推送：OAuth 授权 + 文档/任务/消息 API。
-/// 设置页填 App ID / App Secret → 扫码授权 → 纪要生成后自动推送（只推本人）。
-final class FeishuPush: NSObject, ObservableObject, ASWebAuthenticationPresentationContextProviding {
+/// 设置页填 App ID / App Secret → 浏览器授权 → 纪要生成后自动推送（只推本人）。
+/// OAuth 回调用本地 HTTP 服务（飞书不接受自定义 scheme，只认 http/https）。
+final class FeishuPush: NSObject, ObservableObject {
     static let shared = FeishuPush()
+    /// 本地回调端口，须与飞书后台「安全设置 › 重定向 URL」一致：http://127.0.0.1:17890/
+    static let callbackPort: UInt16 = 17890
 
     @Published var isConnected = false
     @Published var userName = ""
@@ -86,26 +89,54 @@ final class FeishuPush: NSObject, ObservableObject, ASWebAuthenticationPresentat
 
     private func oauthAuthorize() async throws -> String {
         let state = UUID().uuidString
+        let redirect = "http://127.0.0.1:\(Self.callbackPort)/"
         var comps = URLComponents(string: "https://accounts.feishu.cn/open-apis/authen/v1/authorize")!
         comps.queryItems = [
             .init(name: "app_id", value: appId),
-            .init(name: "redirect_uri", value: "tingmo://feishu-callback"),
+            .init(name: "redirect_uri", value: redirect),
             .init(name: "state", value: state),
         ]
-        let url = comps.url!
-        return try await withCheckedThrowingContinuation { cont in
-            let session = ASWebAuthenticationSession(url: url, callbackURLScheme: "tingmo") { callback, error in
-                if let error { cont.resume(throwing: error); return }
-                guard let callback,
-                      let comps = URLComponents(url: callback, resolvingAgainstBaseURL: false),
-                      let code = comps.queryItems?.first(where: { $0.name == "code" })?.value else {
-                    cont.resume(throwing: FeishuError.api("未收到授权码")); return
-                }
-                cont.resume(returning: code)
+        let authURL = comps.url!
+
+        let listener = try NWListener(using: .tcp, on: NWEndpoint.Port(rawValue: Self.callbackPort)!)
+        return try await withCheckedThrowingContinuation { (cont: CheckedContinuation<String, Error>) in
+            let lock = NSLock()
+            var done = false
+            func finish(_ result: Result<String, Error>) {
+                lock.lock(); defer { lock.unlock() }
+                guard !done else { return }
+                done = true
+                listener.cancel()
+                cont.resume(with: result)
             }
-            session.presentationContextProvider = self
-            session.prefersEphemeralWebBrowserSession = false
-            session.start()
+
+            listener.newConnectionHandler = { conn in
+                conn.start(queue: .global())
+                conn.receive(minimumIncompleteLength: 1, maximumLength: 65536) { data, _, _, _ in
+                    guard let data, let req = String(data: data, encoding: .utf8),
+                          let firstLine = req.split(separator: "\r\n").first else { return }
+                    // GET /?code=xxx&state=yyy HTTP/1.1
+                    let parts = firstLine.split(separator: " ")
+                    guard parts.count >= 2,
+                          let url = URL(string: "http://127.0.0.1" + parts[1]),
+                          let q = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems,
+                          let code = q.first(where: { $0.name == "code" })?.value else { return }
+                    let html = "<html><head><meta charset='utf-8'></head><body style='font-family:sans-serif;text-align:center;padding-top:80px'><h2>授权成功</h2><p>请返回听墨，此页面可关闭。</p></body></html>"
+                    let resp = "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\nConnection: close\r\n\r\n\(html)"
+                    conn.send(content: resp.data(using: .utf8), completion: .contentProcessed { _ in conn.cancel() })
+                    finish(.success(code))
+                }
+            }
+            listener.stateUpdateHandler = { st in
+                if case .failed(let e) = st { finish(.failure(FeishuError.api("本地回调端口被占用：\(e.localizedDescription)"))) }
+            }
+            listener.start(queue: .global())
+            DispatchQueue.main.async { NSWorkspace.shared.open(authURL) }
+
+            // 5 分钟超时
+            DispatchQueue.global().asyncAfter(deadline: .now() + 300) {
+                finish(.failure(FeishuError.api("授权超时，请重试")))
+            }
         }
     }
 
@@ -268,12 +299,6 @@ final class FeishuPush: NSObject, ObservableObject, ASWebAuthenticationPresentat
                                      kSecAttrService as String: keychainService,
                                      kSecAttrAccount as String: key]
         SecItemDelete(query as CFDictionary)
-    }
-
-    // MARK: - ASWebAuthenticationPresentationContextProviding
-
-    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        NSApp.keyWindow ?? NSApp.windows.first ?? ASPresentationAnchor()
     }
 }
 

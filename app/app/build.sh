@@ -58,10 +58,6 @@ cat > "$APP/Contents/Info.plist" <<PLIST
   <key>E1WifiVersion</key><string>$WIFI_VERSION</string>
   <key>LSMinimumSystemVersion</key><string>15.0</string>
   <key>LSUIElement</key><true/>
-<key>CFBundleURLTypes</key><array><dict>
-  <key>CFBundleURLName</key><string>app.tingmo.oauth</string>
-  <key>CFBundleURLSchemes</key><array><string>tingmo</string></array>
-</dict></array>
   <key>NSMicrophoneUsageDescription</key><string>用于在菜单栏面板里直接录音，录完自动转写成会议纪要。</string>
   <key>NSHumanReadableCopyright</key><string>© 2026 seabird000 · MIT 许可</string>
 </dict></plist>

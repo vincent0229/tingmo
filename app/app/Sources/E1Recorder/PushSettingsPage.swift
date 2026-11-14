@@ -60,7 +60,7 @@ struct PushSettingsPage: View {
                 } header: {
                     Text("应用凭证")
                 } footer: {
-                    Text("在 [飞书开放平台](https://open.feishu.cn) 创建企业自建应用，开通 docx:document、task:task:write、im:message 权限，安全设置中添加重定向 URL：tingmo://feishu-callback。")
+                    Text("在 [飞书开放平台](https://open.feishu.cn) 创建企业自建应用，开通 docx:document、task:task:write、im:message 权限，安全设置 › 重定向 URL 添加：http://127.0.0.1:17890/（必须以 / 结尾）。")
                         .font(.callout)
                 }
             }
