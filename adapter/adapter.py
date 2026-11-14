@@ -20,6 +20,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 WHISPER_CLI = os.environ.get("WHISPER_CLI", "/opt/homebrew/bin/whisper-cli")
 MODEL = os.environ.get("WHISPER_MODEL", os.path.join(HERE, "models", "ggml-small.bin"))
 OLLAMA = os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434")
+WHISPER_SERVER = os.environ.get("WHISPER_SERVER", "http://127.0.0.1:8081")
 LANG = os.environ.get("WHISPER_LANG", "zh")
 THREADS = os.environ.get("WHISPER_THREADS", "4")
 
@@ -36,7 +37,49 @@ def _models():
     return {"object": "list", "data": data}
 
 
+def _map_segments(raw):
+    """兼容 whisper-server（OpenAI 风格 segments）与 whisper-cli（transcription+offsets）两种输出。"""
+    segments, texts = [], []
+    if isinstance(raw.get("segments"), list):
+        for s in raw["segments"]:
+            text = (s.get("text") or "").strip()
+            segments.append({"start": float(s.get("start", 0)), "end": float(s.get("end", 0)), "text": text})
+            texts.append(text)
+    else:
+        for t in raw.get("transcription", []):
+            off = t.get("offsets", {})
+            text = (t.get("text") or "").strip()
+            segments.append({"start": off.get("from", 0) / 1000.0, "end": off.get("to", 0) / 1000.0, "text": text})
+            texts.append(text)
+    return " ".join(texts).strip(), segments
+
+
+def _transcribe_server(file_bytes: bytes, filename: str, response_format: str, prompt: str):
+    boundary = "----e1adapter" + os.urandom(8).hex()
+    parts = []
+    fields = [("response_format", "verbose_json"), ("temperature", "0")]
+    if prompt:
+        fields.append(("prompt", prompt))
+    for k, v in fields:
+        parts.append(f"--{boundary}\r\nContent-Disposition: form-data; name=\"{k}\"\r\n\r\n{v}\r\n".encode())
+    parts.append(f"--{boundary}\r\nContent-Disposition: form-data; name=\"file\"; filename=\"{filename or 'audio.wav'}\"\r\nContent-Type: application/octet-stream\r\n\r\n".encode())
+    parts.append(file_bytes)
+    parts.append(f"\r\n--{boundary}--\r\n".encode())
+    req = urllib.request.Request(WHISPER_SERVER + "/inference", data=b"".join(parts),
+                                 headers={"Content-Type": f"multipart/form-data; boundary={boundary}"})
+    with urllib.request.urlopen(req, timeout=3600) as r:
+        raw = json.load(r)
+    text, segments = _map_segments(raw)
+    if response_format == "json":
+        return {"text": text}
+    return {"text": text, "language": raw.get("language", LANG), "segments": segments}
+
+
 def _transcribe_sync(file_bytes: bytes, filename: str, response_format: str, prompt: str):
+    try:
+        return _transcribe_server(file_bytes, filename, response_format, prompt)
+    except Exception:
+        pass  # 常驻服务不可用时回退 CLI（冷加载）
     suffix = os.path.splitext(filename or "audio.wav")[1] or ".wav"
     with tempfile.TemporaryDirectory(prefix="e1asr-") as td:
         path = os.path.join(td, "audio" + suffix)
@@ -73,7 +116,10 @@ async def _chat(request: Request):
         payload = json.loads(body)
         for m in payload.get("messages", []):
             if m.get("role") == "system":
-                m["content"] += f"\n当前日期：{date.today().isoformat()}，待办截止年份以此为准。"
+                m["content"] += (f"\n当前日期：{date.today().isoformat()}，待办截止年份以此为准。"
+                                 "\nsummary 字段务必写满 200 到 400 字，按议题逐一展开，不要过度精简；"
+                                 "若转写内容本身不足，按实际内容输出，不要编造填充。"
+                                 "\ntodos 字段必须是字符串数组。")
                 break
         body = json.dumps(payload).encode()
     except Exception:

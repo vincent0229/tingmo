@@ -47,7 +47,7 @@ struct AboutPage: View {
                 }
                 .frame(maxWidth: .infinity)
             } footer: {
-                Text("MIT 许可 · 基于 E1Recorder (MIT) © seabird000 · 内置 adb（Apache-2.0）")
+                Text("MIT 许可 · 内置 adb（Apache-2.0）")
                     .foregroundStyle(.secondary).frame(maxWidth: .infinity, alignment: .leading).multilineTextAlignment(.leading)
             }
         }

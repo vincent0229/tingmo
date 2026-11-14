@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>Label</key><string>com.tingmo.whisper</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/opt/homebrew/bin/whisper-server</string>
+    <string>-m</string>
+    <string>/Users/vincent_zeng/AI/WorkBuddy/搜狗 E1/models/ggml-large-v3-turbo-q5_0.bin</string>
+    <string>--host</string>
+    <string>127.0.0.1</string>
+    <string>--port</string>
+    <string>8081</string>
+    <string>-l</string>
+    <string>zh</string>
+    <string>-t</string>
+    <string>4</string>
+  </array>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>StandardOutPath</key><string>/Users/vincent_zeng/Library/Logs/tingmo-whisper.log</string>
+  <key>StandardErrorPath</key><string>/Users/vincent_zeng/Library/Logs/tingmo-whisper.log</string>
+</dict></plist>

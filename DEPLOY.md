@@ -11,6 +11,14 @@ E1 录音笔 ──USB──▶ E1录音助手/听墨 App ──HTTP──▶ �
 App 产出纪要 ──▶ push/push.py ──▶ 钉钉(命令计划+助手直执) / 飞书(全自动)
 ```
 
+## 0. 一键安装（推荐）
+
+```bash
+./install.sh    # 依赖+模型+launchd 常驻+验证，幂等可重复跑
+```
+
+以下手动步骤供排查/定制参考。
+
 ## 1. 依赖安装
 
 ```bash
@@ -35,6 +43,9 @@ curl -L -o ggml-large-v3-turbo-q5_0.bin \
 `adapter/run.sh` 默认用 turbo；换模型改 `WHISPER_MODEL` 环境变量。
 
 ## 3. 启动适配层
+
+转写默认走常驻 whisper-server（:8081，launchd 托管，模型驻留内存，48s 音频约 4s 出稿）；
+服务不可用时适配层自动回退 whisper-cli 冷加载（约 16s）。
 
 手动：
 

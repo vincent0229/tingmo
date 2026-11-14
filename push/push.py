@@ -13,6 +13,7 @@ note.json 为适配层/App 产出的五字段：title/summary/keywords/todos/cha
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 import urllib.request
@@ -140,16 +141,55 @@ def push_feishu(md, note, actions, suggestion, dry):
         msg += "\n建议转发：" + "、".join(suggestion)
     m = run(["lark-cli", "im", "+messages-send", "--as", "bot",
              "--user-id", CFG["feishu_open_id"], "--text", msg])
-    print("  消息:", m.get("ok"))
+    if not m.get("ok"):
+        print("  消息首发失败:", json.dumps(m, ensure_ascii=False)[:200], "→ 重试")
+        m = run(["lark-cli", "im", "+messages-send", "--as", "bot",
+                 "--user-id", CFG["feishu_open_id"], "--text", msg])
+    print("  消息:", m.get("ok"), m.get("data", {}).get("message_id", ""))
     return {"platform": "feishu", "doc_url": url, "readback": ok, "todos": len(actions)}
+
+
+def parse_md(path):
+    """解析 App 产出的 Markdown 纪要（标准/决策等模板）→ 五字段 note。"""
+    text = open(path, encoding="utf-8").read()
+    note = {"title": "", "summary": "", "keywords": [], "todos": [], "chapters": []}
+    m = re.search(r"^#\s+(.+)$", text, re.M)
+    if m:
+        note["title"] = re.sub(r"^\d{6}\s*-\s*", "", m.group(1)).replace(" 会议纪要", "").strip()
+    km = re.search(r"关键词[语]?[：:]\**\s*(.+)", text)
+    if km:
+        note["keywords"] = [k.strip() for k in re.split(r"[、,，]", km.group(1)) if k.strip() and k.strip() != "—"]
+
+    def section(pat):
+        sm = re.search(r"^##\s*[^\n]*" + pat + r"[^\n]*\n(.*?)(?=^##\s|\Z)", text, re.M | re.S)
+        return sm.group(1).strip() if sm else ""
+
+    note["summary"] = section(r"(摘要|结论)")
+    todo_sec = section(r"待办")
+    for line in todo_sec.splitlines():
+        t = re.sub(r"^-\s*(\[[ x]\]\s*)?", "", line.strip()).strip()
+        if t and "未识别" not in t and not t.startswith("|"):
+            note["todos"].append(t)
+    ch_sec = section(r"章节")
+    for cm in re.finditer(r"###\s*`?[^`\n]*`?\s*(.+?)\n+(.*?)(?=###|\Z)", ch_sec, re.S):
+        note["chapters"].append({"title": cm.group(1).strip(), "summary": cm.group(2).strip()})
+    if not note["summary"] and not note["todos"]:
+        j = llm([{"role": "system", "content":
+                  "把输入的会议纪要文本解析为 JSON：{\"title\":\"\",\"summary\":\"\",\"keywords\":[],\"todos\":[],\"chapters\":[]}。只依据文本。"},
+                 {"role": "user", "content": text[:12000]}])
+        note.update({k: j.get(k, note[k]) for k in note})
+    return note
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--note", required=True)
+    ap.add_argument("--note", required=True, help="纪要 JSON 或 App 产出的 Markdown")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
-    note = json.load(open(args.note, encoding="utf-8"))
+    if args.note.lower().endswith((".md", ".markdown")):
+        note = parse_md(args.note)
+    else:
+        note = json.load(open(args.note, encoding="utf-8"))
     actions = structure_actions(note)
     suggestion = suggest_groups(note)
     md = note_markdown(note, actions)
