@@ -12,7 +12,7 @@ models/
 *.aac
 
 # 上游参考克隆（独立仓库，fork 时另建）
-E1Recorder/
+/E1Recorder/
 
 # 授权二维码等临时敏感产物
 feishu-auth-qrcode.png

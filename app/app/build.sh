@@ -43,7 +43,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
-  <key>CFBundleIdentifier</key><string>app.tingmo.mac</string>
+  <key>CFBundleIdentifier</key><string>app.e1recorder.mac</string>
   <key>CFBundleDevelopmentRegion</key><string>zh-Hans</string>
   <key>CFBundleLocalizations</key><array><string>zh-Hans</string></array>
   <key>CFBundleName</key><string>$NAME</string>

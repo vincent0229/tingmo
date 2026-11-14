@@ -43,11 +43,11 @@ struct PlatformInfo {
 }
 
 enum AppLinks {
-    static let repo = URL(string: "https://github.com/vincent0229/tingmo-app")!
-    static let releases = URL(string: "https://github.com/vincent0229/tingmo-app/releases")!
-    static let issues = URL(string: "https://github.com/vincent0229/tingmo-app/issues/new")!
-    static let license = URL(string: "https://github.com/vincent0229/tingmo-app/blob/main/LICENSE")!
-    static let latestAPI = URL(string: "https://api.github.com/repos/vincent0229/tingmo-app/releases/latest")!
+    static let repo = URL(string: "https://github.com/vincent0229/tingmo")!
+    static let releases = URL(string: "https://github.com/vincent0229/tingmo/releases")!
+    static let issues = URL(string: "https://github.com/vincent0229/tingmo/issues/new")!
+    static let license = URL(string: "https://github.com/vincent0229/tingmo/blob/main/LICENSE")!
+    static let latestAPI = URL(string: "https://api.github.com/repos/vincent0229/tingmo/releases/latest")!
     static let buildMonth = "2026 年 11 月"
     static var version: String { Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "开发版" }
 }
