@@ -11,7 +11,7 @@ enum SettingsSection: String, CaseIterable, Identifiable {
         case .storage: "纪要"
         case .device: "设备"
         case .general: "通用"
-        case .about: "关于我们"
+        case .about: "关于"
         }
     }
     var glyph: SidebarIcon.Glyph {

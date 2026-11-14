@@ -29,7 +29,7 @@ struct AboutPage: View {
                     Button("打开…") { NSWorkspace.shared.open(AppLinks.repo) }
                 } label: {
                     Text("项目主页")
-                    Text("github.com/vincent0229/tingmo-app")
+                    Text("github.com/vincent0229/tingmo")
                 }
                 LabeledContent("数据目录") {
                     Button("在访达中显示") {
