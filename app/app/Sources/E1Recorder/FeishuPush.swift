@@ -95,7 +95,7 @@ final class FeishuPush: NSObject, ObservableObject {
             .init(name: "app_id", value: appId),
             .init(name: "redirect_uri", value: redirect),
             .init(name: "state", value: state),
-            .init(name: "scope", value: "docx:document task:task:write im:message contact:user.base:readonly"),
+            .init(name: "scope", value: "docx:document task:task:write im:message.send_as_user contact:user.base:readonly"),
         ]
         let authURL = comps.url!
 
@@ -188,7 +188,7 @@ final class FeishuPush: NSObject, ObservableObject {
         guard pushEnabled, isConnected else { return "" }
         do {
             let token = try await validToken()
-            let docUrl = try await createDoc(title: "听墨·\(title)", token: token)
+            let docUrl = try await createDoc(title: "听墨·\(title)", markdown: markdown, token: token)
             for (task, due) in todos {
                 _ = try? await createTask(summary: task, due: due, token: token)
             }
@@ -200,7 +200,7 @@ final class FeishuPush: NSObject, ObservableObject {
         }
     }
 
-    private func createDoc(title: String, token: String) async throws -> String {
+    private func createDoc(title: String, markdown: String, token: String) async throws -> String {
         let body: [String: Any] = ["title": title, "folder_token": ""]
         let res = try await post("/docx/v1/documents", json: body, token: token)
         guard let data = res["data"] as? [String: Any],
@@ -208,13 +208,27 @@ final class FeishuPush: NSObject, ObservableObject {
               let docId = doc["document_id"] as? String else {
             throw FeishuError.api("创建文档失败")
         }
+        // 写入正文：按行转段落块，分批提交（每批 ≤40 块）
+        var children: [[String: Any]] = []
+        for raw in markdown.split(separator: "\n", omittingEmptySubsequences: false) {
+            let text = raw.trimmingCharacters(in: .whitespaces)
+            if text.isEmpty { continue }
+            children.append(["block_type": 2, "text": ["elements": [["text_run": ["content": text]]]]])
+        }
+        var i = 0
+        while i < children.count {
+            let batch = Array(children[i..<min(i + 40, children.count)])
+            _ = try? await post("/docx/v1/documents/\(docId)/blocks/\(docId)/children",
+                                json: ["children": batch, "index": -1], token: token)
+            i += 40
+        }
         return "https://www.feishu.cn/docx/\(docId)"
     }
 
     private func createTask(summary: String, due: String?, token: String) async throws -> String {
         var task: [String: Any] = ["summary": summary]
-        if let due, !due.isEmpty {
-            task["due"] = ["time": due, "is_all_day": false]
+        if let due, !due.isEmpty, let ms = Self.toMillis(due) {
+            task["due"] = ["timestamp": ms, "is_all_day": false]
         }
         if !openId.isEmpty {
             task["members"] = [["id": openId, "role": "assignee"]]
@@ -226,6 +240,17 @@ final class FeishuPush: NSObject, ObservableObject {
             throw FeishuError.api("创建任务失败")
         }
         return guid
+    }
+
+    /// 日期字符串 → 毫秒时间戳（飞书 task due.time 要求毫秒字符串）
+    private static func toMillis(_ s: String) -> String? {
+        let fmts = ["yyyy-MM-dd'T'HH:mm:ssXXX", "yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd"]
+        let f = DateFormatter(); f.locale = Locale(identifier: "en_US_POSIX")
+        for fmt in fmts {
+            f.dateFormat = fmt
+            if let d = f.date(from: s) { return String(Int(d.timeIntervalSince1970 * 1000)) }
+        }
+        return nil
     }
 
     private func sendMessage(_ text: String, token: String) async throws {
