@@ -107,5 +107,12 @@ extension Pipeline {
         if !settings.keepAudio { dropLocalAudio(job) }
         notify("会议纪要已生成", url.lastPathComponent, jobId: job.id)
         checkBudget()
+        // 飞书原生推送（只推本人）
+        let actions = (b.assistance["actions"] as? [[String: Any]] ?? []).compactMap { $0["text"] as? String }
+        let todoItems = actions.map { ($0, nil as String?) }
+        Task {
+            let result = await FeishuPush.shared.pushNote(title: title, markdown: md, todos: todoItems)
+            if !result.isEmpty { Log.notes.info("\(result)") }
+        }
     }
 }

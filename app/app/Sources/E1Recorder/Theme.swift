@@ -223,7 +223,7 @@ struct Squircle: Shape {
 
 /// Sidebar icons (方案 B): gradient squircle, dark hairline, soft shadow, detailed white line glyph.
 struct SidebarIcon: View {
-    enum Glyph { case platform, storage, device, general, about }
+    enum Glyph { case platform, storage, device, general, about, push }
     let glyph: Glyph
     var size: CGFloat = 20
 
@@ -239,6 +239,7 @@ struct SidebarIcon: View {
             case .device: (0x46D26F, 0x24B04F)     // green
             case .general: (0xAEAEB3, 0x8B8B90)    // grey
             case .about: (0x3A3A3C, 0x0C0C0D)      // graphite
+            case .push: (0xAF7CF5, 0x7B3FE4)       // purple
             }
             ctx.fill(tile, with: .linearGradient(Gradient(colors: [rgb(top), rgb(bottom)]),
                                                  startPoint: .zero, endPoint: CGPoint(x: 0, y: 20)))
@@ -312,6 +313,14 @@ struct SidebarIcon: View {
             ctx.fill(circle(10, 7, 0.9), with: white)
             var i = Path(); i.move(to: CGPoint(x: 10, y: 9.4)); i.addLine(to: CGPoint(x: 10, y: 13.8))
             ctx.stroke(i, with: white, style: line(1.6))
+        case .push:
+            var p = Path()
+            p.move(to: CGPoint(x: 3.8, y: 10)); p.addLine(to: CGPoint(x: 16.2, y: 4.2))
+            p.addLine(to: CGPoint(x: 12.6, y: 16.2)); p.addLine(to: CGPoint(x: 9.4, y: 11.4))
+            p.closeSubpath()
+            ctx.stroke(p, with: white, style: line(1.3))
+            var f = Path(); f.move(to: CGPoint(x: 9.4, y: 11.4)); f.addLine(to: CGPoint(x: 16.2, y: 4.2))
+            ctx.stroke(f, with: white, style: line(1.0))
         }
     }
 }

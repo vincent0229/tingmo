@@ -3,7 +3,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 enum SettingsSection: String, CaseIterable, Identifiable {
-    case platform, storage, device, general, about
+    case platform, storage, device, general, push, about
     var id: String { rawValue }
     var title: String {
         switch self {
@@ -11,6 +11,7 @@ enum SettingsSection: String, CaseIterable, Identifiable {
         case .storage: "纪要"
         case .device: "设备"
         case .general: "通用"
+        case .push: "推送"
         case .about: "关于"
         }
     }
@@ -20,6 +21,7 @@ enum SettingsSection: String, CaseIterable, Identifiable {
         case .storage: .storage
         case .device: .device
         case .general: .general
+        case .push: .push
         case .about: .about
         }
     }
@@ -68,7 +70,7 @@ struct SettingsView: View {
         NavigationSplitView {
             List(selection: $selection) {
                 Section {
-                    ForEach([SettingsSection.platform, .storage, .device, .general]) { row($0) }
+                    ForEach([SettingsSection.platform, .storage, .device, .general, .push]) { row($0) }
                 }
                 Section {
                     row(.about)
@@ -153,6 +155,7 @@ struct SettingsView: View {
         case .storage: StoragePage()
         case .device: DevicePage()
         case .general: GeneralPage()
+        case .push: PushSettingsPage()
         case .about: AboutPage()
         }
     }
