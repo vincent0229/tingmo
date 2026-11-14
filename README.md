@@ -19,7 +19,7 @@
 | `方案设计与功能扩展.md` | 六层架构设计 + 社区玩法评估 |
 | `E1功能全景研究.md` | 硬件能力底牌 + 8 类 28 项功能全景 |
 | `models/` | 本地模型（git 忽略，从 ModelScope 下载） |
-| `app/` | 听墨 App 源码（Swift/SwiftPM，构建见 app/build.sh） |
+| `app/` | 听墨 App 源码（Swift/SwiftPM，Xcode 打开工程构建；`app/build.sh` 已不存在，以 Xcode / 官方 v1.3.2 DMG 为准） |
 | `E1Recorder/` | 上游参考克隆（git 忽略） |
 
 ## 快速开始

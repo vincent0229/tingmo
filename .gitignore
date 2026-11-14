@@ -24,3 +24,11 @@ __pycache__/
 .DS_Store
 nohup.out
 *.log
+
+# 推送层运行时产物（每次运行生成，勿入库）
+push/last-note.md
+push/sample-app-note.md
+push/dingtalk-plan.json
+
+# 适配层热词工作文件（由 push/hotwords.py 依据日历生成，本地工作文件）
+adapter/hotwords.txt
