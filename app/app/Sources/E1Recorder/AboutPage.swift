@@ -41,14 +41,11 @@ struct AboutPage: View {
                 VStack(spacing: 4) {
                     Image(nsImage: NSApp.applicationIconImage).resizable().frame(width: 64, height: 64)
                     Text("听墨").font(.title3.weight(.semibold)).foregroundStyle(.primary).padding(.top, 6)
-                    Text("声音落成墨迹。搜狗 E1 录音笔的私有化转写工作站：本地转写、本地纪要，音频不出本机。")
+                    Text("声音落成墨迹。私有化录音转写工作站：本地转写、本地纪要，音频不出本机。")
                         .font(.callout).fontWeight(.regular).foregroundStyle(.secondary).multilineTextAlignment(.center)
                         .frame(maxWidth: 380).padding(.top, 2).padding(.bottom, 14)
                 }
                 .frame(maxWidth: .infinity)
-            } footer: {
-                Text("MIT 许可 · 内置 adb（Apache-2.0）")
-                    .foregroundStyle(.secondary).frame(maxWidth: .infinity, alignment: .leading).multilineTextAlignment(.leading)
             }
         }
     }
