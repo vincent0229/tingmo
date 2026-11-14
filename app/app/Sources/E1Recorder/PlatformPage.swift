@@ -430,7 +430,7 @@ struct PipelineSteps: View {
             return [
                 Step(symbol: "mic.fill", title: "录音 / 音频", state: .done, detail: MarkdownRenderer.duration(c.durationSec)),
                 Step(symbol: "arrow.up", title: "上传音频", state: .done, detail: "100%"),
-                Step(symbol: "waveform", title: "云端转写", state: .done, detail: "100%"),
+                Step(symbol: "waveform", title: "转写", state: .done, detail: "100%"),
                 Step(symbol: "doc.text", title: "存到本地", state: .done, detail: "已保存"),
             ]
         }
@@ -448,7 +448,7 @@ struct PipelineSteps: View {
                 let left = "等网络 \(max(0, Int(until.timeIntervalSince(now))))s"
                 if f.state == .transcribing { s2 = .done; d2 = "100%"; s3 = .waiting; d3 = left } else { s2 = .waiting; d2 = left }
             case nil:
-                if f.state == .transcribing { s2 = .done; d2 = "100%"; s3 = .active(nil); d3 = "云端处理中" }
+                if f.state == .transcribing { s2 = .done; d2 = "100%"; s3 = .active(nil); d3 = "转写中" }
                 else if blocked { s2 = .waiting; d2 = "等待设置" }
                 else { d2 = "排队中" }
             }
@@ -456,7 +456,7 @@ struct PipelineSteps: View {
         return [
             Step(symbol: "mic.fill", title: "录音 / 音频", state: s1, detail: d1),
             Step(symbol: "arrow.up", title: "上传音频", state: s2, detail: d2),
-            Step(symbol: "waveform", title: "云端转写", state: s3, detail: d3),
+            Step(symbol: "waveform", title: "转写", state: s3, detail: d3),
             Step(symbol: "doc.text", title: "存到本地", state: s4, detail: d4),
         ]
     }

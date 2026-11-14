@@ -13,7 +13,7 @@ struct DevicePage: View {
                 HStack(spacing: 12) {
                     SidebarIcon(glyph: .device, size: 32)
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("搜狗 E1 录音笔")
+                        Text("录音笔")
                         HStack(spacing: 6) {
                             PenStatusLine()
                             if pipeline.manualSync {
