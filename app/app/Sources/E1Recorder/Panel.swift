@@ -110,9 +110,9 @@ struct MenuPanel: View {
         } else if let r = pipeline.syncResult {
             BigLabel(symbol: "checkmark", title: "同步完成", sub: r)
         } else if !pipeline.canSyncNow {
-            BigLabel(symbol: "arrow.triangle.2.circlepath", title: "云端同步", sub: "未连接设备")
+            BigLabel(symbol: "arrow.triangle.2.circlepath", title: "同步", sub: "未连接设备")
         } else {
-            BigLabel(symbol: "arrow.triangle.2.circlepath", title: "云端同步",
+            BigLabel(symbol: "arrow.triangle.2.circlepath", title: "同步",
                      sub: pipeline.lastSync.map { "上次 " + DateFormatter.cached("HH:mm").string(from: $0) } ?? "尚未同步")
         }
     }
@@ -151,7 +151,7 @@ struct DeviceRow: View {
             }
             .frame(width: 26, height: 26)
             VStack(alignment: .leading, spacing: 2) {
-                Text("搜狗 E1 录音笔").font(.e1Body).foregroundStyle(Color.t1)
+                Text("录音笔").font(.e1Body).foregroundStyle(Color.t1)
                 PenStatusLine(compact: true)
             }
             Spacer(minLength: 0)
@@ -483,12 +483,11 @@ struct PanelMenuItem: View {
     }
 }
 
-/// One row for both folders; the chevron opens a small menu to pick 全部纪要 or 录音文件.
-/// 全部纪要: straight to the folder where transcribed recordings end up as notes.
+/// 纪要：在访达中打开纪要文件夹（转写后的录音笔记都落在这里）。
 struct FoldersMenuItem: View {
     @EnvironmentObject var settings: AppSettings
     var body: some View {
-        PanelMenuItem(title: "全部纪要") { reveal(settings.notesFolder) }
+        PanelMenuItem(title: "纪要") { reveal(settings.notesFolder) }
     }
 }
 
