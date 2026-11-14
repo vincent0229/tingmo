@@ -130,7 +130,7 @@ struct WelcomeView: View {
         .sheet(isPresented: $editingKey) {
             EditSheet(title: "填写访问密钥", help: s.provider == .custom ? "自定义平台的 API Key，只保存在本机钥匙串。" : "在百炼控制台 › 密钥管理中创建，以 sk- 开头。",
                       placeholder: s.provider == .custom ? "API Key" : "sk-…", secure: true, initial: "",
-                      validate: { k in s.provider == .custom ? (k.count >= 8 ? nil : "密钥太短") : (k.hasPrefix("sk-") && k.count >= 20 ? nil : "应以 sk- 开头") },
+                      validate: { k in s.provider == .custom ? (k.isEmpty ? "密钥不能为空" : nil) : (k.hasPrefix("sk-") && k.count >= 20 ? nil : "应以 sk- 开头") },
                       save: { s.saveAPIKey($0) })
         }
         .sheet(isPresented: $editingAppId) {
@@ -188,7 +188,9 @@ struct WelcomeView: View {
             } header: {
                 StepHeader(number: 3, title: "设置转写平台", done: s.isConfigured, status: s.isConfigured ? "已设置" : "需要访问密钥")
             } footer: {
-                Text(.init("密钥在阿里云百炼控制台 › 密钥管理中创建，只保存在这台 Mac 的钥匙串里。[打开百炼控制台…](https://bailian.console.aliyun.com/)"))
+                Text(.init(s.provider == .custom
+                     ? "自定义平台的 API Key 为任意非空串，只保存在这台 Mac 的钥匙串里。"
+                     : "密钥在阿里云百炼控制台 › 密钥管理中创建，只保存在这台 Mac 的钥匙串里。[打开百炼控制台…](https://bailian.console.aliyun.com/)"))
                     .foregroundStyle(.secondary).frame(maxWidth: .infinity, alignment: .leading)
             }
 

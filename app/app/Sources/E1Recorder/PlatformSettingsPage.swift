@@ -72,7 +72,9 @@ struct PlatformSettingsPage: View {
                     }
                 }
             } header: {
-                SectionTitle("接入参数", info: "应用编号在百炼控制台 › 应用 › 通义听悟中查看，以 tw_ 开头。访问密钥只存在这台 Mac 的钥匙串里，不写进文件，也不会导出。自定义平台支持任何 OpenAI 兼容接口。[打开百炼控制台…](https://bailian.console.aliyun.com/)")
+                SectionTitle("接入参数", info: s.provider == .custom
+                     ? "自定义平台支持任何 OpenAI 兼容接口。访问密钥为任意非空串，只存在这台 Mac 的钥匙串里，不写进文件，也不会导出。"
+                     : "应用编号在百炼控制台 › 应用 › 通义听悟中查看，以 tw_ 开头。访问密钥只存在这台 Mac 的钥匙串里，不写进文件，也不会导出。[打开百炼控制台…](https://bailian.console.aliyun.com/)")
             }
 
             Section {
@@ -153,9 +155,9 @@ struct PlatformSettingsPage: View {
         switch e {
         case .key:
             if s.provider == .custom {
-                EditSheet(title: "填写访问密钥", help: "自定义平台的 API Key，只保存在本机钥匙串，与百炼的密钥分开存放。",
+                EditSheet(title: "填写访问密钥", help: "自定义平台的 API Key，任意非空串即可，只保存在本机钥匙串。",
                           placeholder: "API Key", secure: true, initial: "",
-                          validate: { $0.count >= 8 ? nil : "密钥太短" }, save: { s.saveAPIKey($0) })
+                          validate: { $0.isEmpty ? "密钥不能为空" : nil }, save: { s.saveAPIKey($0) })
             } else {
                 EditSheet(title: "填写访问密钥", help: "在百炼控制台 › 密钥管理中创建，以 sk- 开头。只保存在本机钥匙串。",
                           placeholder: "sk-…", secure: true, initial: "",
