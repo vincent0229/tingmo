@@ -1,0 +1,9 @@
+{
+  "user_name": "曾伟",
+  "feishu_open_id": "ou_604c222b57036b79e6f17451b0f267ed",
+  "dingtalk_enabled": true,
+  "feishu_enabled": true,
+  "ollama_url": "http://127.0.0.1:11434",
+  "llm_model": "qwen2.5:7b-instruct-q4_K_M",
+  "routing_file": "../routing.json"
+}

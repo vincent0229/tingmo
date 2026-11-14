@@ -120,6 +120,12 @@ def models():
 @app.post("/audio/transcriptions")
 async def transcribe(file: UploadFile = File(...), model: str = Form("whisper-small"),
                      response_format: str = Form("verbose_json"), prompt: str = Form("")):
+    # 日历热词注入（FR-14）：push/hotwords.py 生成的今日参会人/项目名
+    hw_file = os.path.join(HERE, "hotwords.txt")
+    if os.path.exists(hw_file):
+        hw = "、".join(l.strip() for l in open(hw_file, encoding="utf-8") if l.strip())
+        if hw:
+            prompt = (prompt + " 专有名词：" + hw).strip()
     try:
         data = _transcribe_sync(await file.read(), file.filename or "", response_format, prompt)
         return JSONResponse(data)
