@@ -160,8 +160,6 @@ struct WelcomeView: View {
                 Text("搜狗的对时服务器已关闭，录音笔断电后时间会乱，录音和纪要上的时间就不准。WiFi 上传程序是可选的，在第 3 页设置。这些程序以后都在「偏好 › 设备 › 录音笔上的程序」里查看和更新。")
                     .foregroundStyle(.secondary).frame(maxWidth: .infinity, alignment: .leading).multilineTextAlignment(.leading)
             }
-
-            DeadFeaturesSection()
         }
         .formStyle(.grouped)
         .scrollContentBackground(.hidden)
@@ -338,56 +336,6 @@ struct UpdateBanner: View {
             .background(Color.e1Blue.opacity(0.1), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
             .padding(.horizontal, 8).padding(.bottom, 6)
         }
-    }
-}
-
-// MARK: - 笔上已失效的功能
-
-/// Pen features that needed Sogou's servers (shut down 2024-05-30), so users don't waste time on them.
-struct DeadFeaturesSection: View {
-    static let items: [(String, String)] = [
-        ("个人中心", "登录搜狗账号、会员和同步，账号服务器已关闭"),
-        ("对话翻译", "依赖搜狗翻译服务器"),
-        ("同声传译", "依赖搜狗语音服务器"),
-        ("AI 键长按", "实时转写、语音助手，依赖搜狗语音服务器"),
-        ("在线升级", "升级服务器已关闭，固件停留在 1.2.3"),
-        ("手机 App 配对", "「搜狗录音助手」App 已停服，改用本应用同步"),
-    ]
-    var startExpanded = false
-    @State private var expanded = false
-    var body: some View {
-        Section {
-            Button {
-                withAnimation(.easeInOut(duration: 0.2)) { expanded.toggle() }
-            } label: {
-                HStack {
-                    Image(systemName: "chevron.right").font(.system(size: 11, weight: .semibold)).foregroundStyle(.secondary)
-                        .rotationEffect(.degrees(expanded ? 90 : 0))
-                    Text("笔上已失效的功能")
-                    Spacer()
-                    Text("\(Self.items.count) 项").foregroundStyle(.secondary)
-                }
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-
-            if expanded {
-                ForEach(Self.items, id: \.0) { item in
-                    LabeledContent {
-                        StatusTag(text: "不可用", color: .secondary)
-                    } label: {
-                        Text(item.0)
-                        Text(item.1)
-                    }
-                }
-            }
-        } footer: {
-            if expanded {
-                Text("搜狗云服务已于 2024 年 5 月 30 日停止，这些功能无法使用；录音、播放、标记等本地功能正常。")
-                    .foregroundStyle(.secondary).frame(maxWidth: .infinity, alignment: .leading).multilineTextAlignment(.leading)
-            }
-        }
-        .onAppear { if startExpanded { expanded = true } }
     }
 }
 

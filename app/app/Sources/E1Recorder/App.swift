@@ -64,13 +64,6 @@ enum UIPreview {
     /// screenshotted (the real panel only opens from a click on the menu bar icon).
     @MainActor static func show() {
         if UserDefaults.standard.bool(forKey: "previewDark") { NSApp.appearance = NSAppearance(named: .darkAqua) }
-        if UserDefaults.standard.string(forKey: "previewSection") == "dead" {
-            let w = NSWindow(contentRect: NSRect(x: 200, y: 200, width: 540, height: 520), styleMask: [.titled], backing: .buffered, defer: false)
-            w.title = "组件预览"
-            w.contentView = NSHostingView(rootView: Form { DeadFeaturesSection(startExpanded: true) }.formStyle(.grouped).frame(width: 540, height: 520))
-            w.makeKeyAndOrderFront(nil)
-            windows.append(w)
-        }
         if UserDefaults.standard.string(forKey: "previewSection") == "components" {
             let w = NSWindow(contentRect: NSRect(x: 200, y: 200, width: 600, height: 380), styleMask: [.titled], backing: .buffered, defer: false)
             w.title = "组件预览"

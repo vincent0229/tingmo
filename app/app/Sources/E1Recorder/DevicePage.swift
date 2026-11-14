@@ -94,8 +94,6 @@ struct DevicePage: View {
             PenRecordingsSection()
 
             PlacesSection()
-
-            DeadFeaturesSection()
         }
     }
 
