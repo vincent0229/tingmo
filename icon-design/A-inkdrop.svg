@@ -1,0 +1,10 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1024" height="1024" rx="224" fill="#F5F1E8"/>
+  <path d="M512 150 C512 150 272 470 272 640 A240 240 0 0 0 752 640 C752 470 512 150 512 150 Z" fill="#141414"/>
+  <circle cx="416" cy="640" r="26" fill="#F5F1E8"/>
+  <path d="M468 576 A90 90 0 0 1 468 704" stroke="#F5F1E8" stroke-width="26" fill="none" stroke-linecap="round"/>
+  <path d="M520 532 A152 152 0 0 1 520 748" stroke="#F5F1E8" stroke-width="26" fill="none" stroke-linecap="round"/>
+  <path d="M572 490 A212 212 0 0 1 572 790" stroke="#F5F1E8" stroke-width="26" fill="none" stroke-linecap="round"/>
+  <rect x="716" y="744" width="132" height="132" rx="26" fill="#C8401F"/>
+  <text x="782" y="836" text-anchor="middle" font-family="Kaiti SC, STKaiti, serif" font-size="92" fill="#F5F1E8">听</text>
+</svg>

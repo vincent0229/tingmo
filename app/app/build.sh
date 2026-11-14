@@ -31,15 +31,8 @@ cp ../pen/e1sync.sh ../pen/auto_reboot.sh "$APP/Contents/Resources/"
 (cd ../pen/e1wifi && GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -trimpath -buildvcs=false -ldflags "-s -w" -o build/e1wifi-arm64 .)
 cp ../pen/e1wifi/build/e1wifi-arm64 "$APP/Contents/Resources/"
 WIFI_VERSION="$(grep -o 'const version = "[^"]*"' ../pen/e1wifi/main.go | cut -d'"' -f2)"
-# App icon: Icon Composer file → Assets.car (macOS 26+ glass icon) + AppIcon.icns (older systems)
-# 听墨 fork: 无完整 Xcode（仅 CLT）时 actool 不可用，跳过图标编译，回退系统默认图标
-if xcrun --find actool >/dev/null 2>&1; then
-  xcrun actool "$PWD/Resources/AppIcon.icon" --compile "$PWD/$APP/Contents/Resources" --platform macosx \
-    --minimum-deployment-target 15.0 --app-icon AppIcon --output-partial-info-plist "$PWD/build/icon-partial.plist" >/dev/null
-  rm -f build/icon-partial.plist
-else
-  echo "actool 不可用（需要完整 Xcode），跳过图标编译"
-fi
+# 听墨图标：定制 AppIcon.icns（源 SVG 见仓库 icon-design/B-waveink.svg）
+cp "$PWD/Resources/AppIcon.icns" "$APP/Contents/Resources/AppIcon.icns"
 
 cat > "$APP/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>

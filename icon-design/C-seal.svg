@@ -1,0 +1,6 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1024" height="1024" rx="224" fill="#F5F1E8"/>
+  <rect x="192" y="192" width="640" height="640" rx="72" fill="#C8401F"/>
+  <text x="352" y="618" text-anchor="middle" font-family="Kaiti SC, STKaiti, serif" font-size="300" fill="#F5F1E8">听</text>
+  <text x="672" y="618" text-anchor="middle" font-family="Kaiti SC, STKaiti, serif" font-size="300" fill="#F5F1E8">墨</text>
+</svg>
