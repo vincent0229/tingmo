@@ -24,6 +24,8 @@ xcrun strip -S -x "$APP/Contents/MacOS/E1Recorder"
 ADB="$(python3 -c 'import os,shutil;print(os.path.realpath(shutil.which("adb")))')"
 cp "$ADB" "$APP/Contents/Resources/adb"
 cp "$(dirname "$ADB")/NOTICE.txt" "$APP/Contents/Resources/adb-NOTICE.txt"
+# MIT 合规：上游许可证全文随二进制分发（版权声明必须 accompanies copies）
+cp ../LICENSE "$APP/Contents/Resources/LICENSE-E1Recorder.txt"
 cp ../pen/e1sync.sh ../pen/auto_reboot.sh "$APP/Contents/Resources/"
 # WiFi uploader for the pen (Linux arm64, static). Needs Go: brew install go
 (cd ../pen/e1wifi && GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -trimpath -buildvcs=false -ldflags "-s -w" -o build/e1wifi-arm64 .)
