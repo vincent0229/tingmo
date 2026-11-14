@@ -18,8 +18,8 @@ final class FeishuPush: NSObject, ObservableObject {
     private let keychainService = "TingMoFeishu"
 
     var appId: String {
-        get { defaults.string(forKey: "feishuAppId") ?? "" }
-        set { defaults.set(newValue, forKey: "feishuAppId") }
+        get { keychainRead("appId") ?? "" }
+        set { keychainSave("appId", value: newValue) }
     }
     var appSecret: String {
         get { keychainRead("appSecret") ?? "" }
@@ -51,8 +51,11 @@ final class FeishuPush: NSObject, ObservableObject {
 
     // MARK: - OAuth
 
-    func connect() async {
-        guard !appId.isEmpty, !appSecret.isEmpty else {
+    func connect(appId inputId: String, appSecret inputSecret: String) async {
+        // 显式持久化凭证（不依赖 TextField onChange），存 Keychain
+        keychainSave("appId", value: inputId)
+        keychainSave("appSecret", value: inputSecret)
+        guard !inputId.isEmpty, !inputSecret.isEmpty else {
             status = "请先填写 App ID 和 App Secret"; return
         }
         status = "正在获取应用凭证…"
@@ -71,7 +74,8 @@ final class FeishuPush: NSObject, ObservableObject {
     }
 
     func disconnect() {
-        keychainDelete("userToken"); keychainDelete("refreshToken"); keychainDelete("appSecret")
+        // 只清令牌，保留 App ID/Secret，重连无需重填
+        keychainDelete("userToken"); keychainDelete("refreshToken")
         defaults.removeObject(forKey: "feishuTokenExpiry")
         defaults.removeObject(forKey: "feishuOpenId")
         defaults.removeObject(forKey: "feishuUserName")

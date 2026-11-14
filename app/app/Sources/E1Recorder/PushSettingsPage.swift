@@ -54,9 +54,14 @@ struct PushSettingsPage: View {
                     }
                     Button(connecting ? "连接中…" : "连接飞书") {
                         connecting = true
-                        Task { await feishu.connect(); connecting = false }
+                        Task {
+                            let id = appId.isEmpty ? feishu.appId : appId
+                            let sec = appSecret.isEmpty ? feishu.appSecret : appSecret
+                            await feishu.connect(appId: id, appSecret: sec)
+                            connecting = false
+                        }
                     }
-                    .disabled(connecting || appId.isEmpty || appSecret.isEmpty)
+                    .disabled(connecting || (appId.isEmpty && feishu.appId.isEmpty) || (appSecret.isEmpty && feishu.appSecret.isEmpty))
                 } header: {
                     Text("应用凭证")
                 } footer: {
@@ -74,6 +79,6 @@ struct PushSettingsPage: View {
             }
         }
         .formStyle(.grouped)
-        .onAppear { appId = feishu.appId }
+        .onAppear { appId = feishu.appId; appSecret = feishu.appSecret }
     }
 }
