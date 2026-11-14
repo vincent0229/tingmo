@@ -217,14 +217,27 @@ final class FeishuPush: NSObject, ObservableObject, ASWebAuthenticationPresentat
         if let token { req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
         req.httpBody = try JSONSerialization.data(withJSONObject: json)
         let (data, _) = try await URLSession.shared.data(for: req)
-        return (try? JSONSerialization.jsonObject(with: data) as? [String: Any]) ?? [:]
+        let res = (try? JSONSerialization.jsonObject(with: data) as? [String: Any]) ?? [:]
+        try Self.check(res, path: path)
+        return res
     }
 
     private func get(_ path: String, token: String) async throws -> [String: Any] {
         var req = URLRequest(url: URL(string: base + path)!, timeoutInterval: 30)
         req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         let (data, _) = try await URLSession.shared.data(for: req)
-        return (try? JSONSerialization.jsonObject(with: data) as? [String: Any]) ?? [:]
+        let res = (try? JSONSerialization.jsonObject(with: data) as? [String: Any]) ?? [:]
+        try Self.check(res, path: path)
+        return res
+    }
+
+    ///  surface 飞书真实错误码 + 描述，便于定位（如 20029 redirect_uri 无效）
+    private static func check(_ res: [String: Any], path: String) throws {
+        let code = res["code"] as? Int ?? -1
+        if code != 0 {
+            let msg = res["msg"] as? String ?? res["message"] as? String ?? "未知错误"
+            throw FeishuError.api("[\(code)] \(msg)（\(path)）")
+        }
     }
 
     // MARK: - Keychain
