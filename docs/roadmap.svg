@@ -1,0 +1,58 @@
+<svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;background:#ffffff">
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+<path d="M0,0 L10,5 L0,10 Z" fill="#59636e"/>
+</marker>
+</defs>
+<text x="15" y="24" fill="#1f2328" font-size="18" font-weight="600" font-family="system-ui,sans-serif">听墨 · 功能全景路线图</text>
+<text x="300" y="24" fill="#59636e" font-size="12" font-family="system-ui,sans-serif">E1 私有化录音转写工作站 · 音频不出本机 · 运行成本 ¥0 · 2026-11-14</text>
+<rect x="15" y="45" width="150" height="44" rx="6" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+<text x="90" y="64" text-anchor="middle" fill="#1f2328" font-size="13" font-weight="600" font-family="system-ui,sans-serif">E1 录音笔</text>
+<text x="90" y="80" text-anchor="middle" fill="#59636e" font-size="11" font-family="system-ui,sans-serif">8麦阵列 · 待到货</text>
+<line x1="165" y1="67" x2="193" y2="67" stroke="#59636e" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="195" y="45" width="150" height="44" rx="6" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+<text x="270" y="64" text-anchor="middle" fill="#1f2328" font-size="13" font-weight="600" font-family="system-ui,sans-serif">同步层</text>
+<text x="270" y="80" text-anchor="middle" fill="#59636e" font-size="11" font-family="system-ui,sans-serif">USB · 去重</text>
+<line x1="345" y1="67" x2="373" y2="67" stroke="#59636e" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="375" y="45" width="150" height="44" rx="6" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+<text x="450" y="64" text-anchor="middle" fill="#1f2328" font-size="13" font-weight="600" font-family="system-ui,sans-serif">本地转写</text>
+<text x="450" y="80" text-anchor="middle" fill="#59636e" font-size="11" font-family="system-ui,sans-serif">适配层 :8090</text>
+<line x1="525" y1="67" x2="553" y2="67" stroke="#59636e" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="555" y="45" width="150" height="44" rx="6" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+<text x="630" y="64" text-anchor="middle" fill="#1f2328" font-size="13" font-weight="600" font-family="system-ui,sans-serif">纪要生成</text>
+<text x="630" y="80" text-anchor="middle" fill="#59636e" font-size="11" font-family="system-ui,sans-serif">ollama qwen2.5:7b</text>
+<line x1="705" y1="67" x2="733" y2="67" stroke="#59636e" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="735" y="45" width="150" height="44" rx="6" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+<text x="810" y="64" text-anchor="middle" fill="#1f2328" font-size="13" font-weight="600" font-family="system-ui,sans-serif">双平台推送</text>
+<text x="810" y="80" text-anchor="middle" fill="#59636e" font-size="11" font-family="system-ui,sans-serif">只推本人 · 不进群</text>
+<g font-size="12" font-family="system-ui,sans-serif">
+<circle cx="25" cy="115" r="3" fill="#1a7f37"/><text x="34" y="119" fill="#1f2328">原生录音 96kHz/24bit</text>
+<circle cx="25" cy="139" r="3" fill="#818b98"/><text x="34" y="143" fill="#59636e">定时录音</text>
+<circle cx="25" cy="163" r="3" fill="#818b98"/><text x="34" y="167" fill="#59636e">手机遥控录音</text>
+<circle cx="25" cy="187" r="3" fill="#818b98"/><text x="34" y="191" fill="#59636e">VAD 触发录音</text>
+<circle cx="205" cy="115" r="3" fill="#1a7f37"/><text x="214" y="119" fill="#1f2328">USB 自动拷贝</text>
+<circle cx="205" cy="139" r="3" fill="#9a6700"/><text x="214" y="143" fill="#59636e">真机验证（待笔）</text>
+<circle cx="205" cy="163" r="3" fill="#818b98"/><text x="214" y="167" fill="#59636e">局域网直传</text>
+<circle cx="205" cy="187" r="3" fill="#818b98"/><text x="214" y="191" fill="#59636e">校验+断点续传</text>
+<circle cx="385" cy="115" r="3" fill="#1a7f37"/><text x="394" y="119" fill="#1f2328">whisper turbo 转写</text>
+<circle cx="385" cy="139" r="3" fill="#1a7f37"/><text x="394" y="143" fill="#1f2328">日历热词注入</text>
+<circle cx="385" cy="163" r="3" fill="#1a7f37"/><text x="394" y="167" fill="#1f2328">launchd 自启托管</text>
+<circle cx="385" cy="187" r="3" fill="#818b98"/><text x="394" y="191" fill="#59636e">说话人分离</text>
+<circle cx="385" cy="211" r="3" fill="#818b98"/><text x="394" y="215" fill="#59636e">空间分离 DoA（探针）</text>
+<circle cx="565" cy="115" r="3" fill="#1a7f37"/><text x="574" y="119" fill="#1f2328">五字段结构化纪要</text>
+<circle cx="565" cy="139" r="3" fill="#1a7f37"/><text x="574" y="143" fill="#1f2328">行动项 主导/配合</text>
+<circle cx="565" cy="163" r="3" fill="#1a7f37"/><text x="574" y="167" fill="#1f2328">5 套模板+热词纠错</text>
+<circle cx="565" cy="187" r="3" fill="#818b98"/><text x="574" y="191" fill="#59636e">跨会议记忆 RAG</text>
+<circle cx="565" cy="211" r="3" fill="#818b98"/><text x="574" y="215" fill="#59636e">知识库问答</text>
+<circle cx="745" cy="115" r="3" fill="#1a7f37"/><text x="754" y="119" fill="#1f2328">文档+待办+消息</text>
+<circle cx="745" cy="139" r="3" fill="#1a7f37"/><text x="754" y="143" fill="#1f2328">建议转发提示</text>
+<circle cx="745" cy="163" r="3" fill="#1a7f37"/><text x="754" y="167" fill="#1f2328">写后回读验证</text>
+<circle cx="745" cy="187" r="3" fill="#818b98"/><text x="754" y="191" fill="#59636e">日历驱动自动录音</text>
+<circle cx="745" cy="211" r="3" fill="#818b98"/><text x="754" y="215" fill="#59636e">取证级存证 demo</text>
+</g>
+<line x1="15" y1="235" x2="885" y2="235" stroke="#d1d9e0" stroke-width="1"/>
+<circle cx="20" cy="256" r="4" fill="#1a7f37"/><text x="30" y="260" fill="#59636e" font-size="12" font-family="system-ui,sans-serif">已实现/已验证</text>
+<circle cx="150" cy="256" r="4" fill="#9a6700"/><text x="160" y="260" fill="#59636e" font-size="12" font-family="system-ui,sans-serif">进行中/待验证</text>
+<circle cx="290" cy="256" r="4" fill="#818b98"/><text x="300" y="260" fill="#59636e" font-size="12" font-family="system-ui,sans-serif">规划</text>
+<text x="15" y="285" fill="#59636e" font-size="12" font-family="system-ui,sans-serif">里程碑：M1 本地转写 ✓ → M2 推送闭环 ✓ → M3 笔端接入（待到货）→ M4 增强（分离/日历驱动/取证）</text>
+</svg>

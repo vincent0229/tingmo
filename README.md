@@ -5,6 +5,10 @@
 
 - `app/`：听墨 App 源码（E1Recorder MIT 派生，subtree 并入，含上游历史；上游更新用 `git subtree pull --prefix=app upstream main`）
 
+## 路线图
+
+[docs/ROADMAP.md](docs/ROADMAP.md)（含功能全景图）
+
 ## 结构
 
 | 目录/文件 | 说明 |
