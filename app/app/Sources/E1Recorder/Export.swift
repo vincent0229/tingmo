@@ -211,8 +211,12 @@ enum MarkdownHTML {
                     out.append("<p class=\"row\"><b>" + rows[0].map(inline).joined(separator: "\u{3000}|\u{3000}") + "</b></p>")
                     out.append(contentsOf: rows.dropFirst().map { "<p class=\"row\">" + $0.map(inline).joined(separator: "\u{3000}|\u{3000}") + "</p>" })
                 } else {
-                    out.append("<table\(page ? " class=\"grid\" cellspacing=\"0\"" : "")><tr>" + rows[0].map { "<th>\(inline($0))</th>" }.joined() + "</tr>"
-                               + rows.dropFirst().map { "<tr>" + $0.map { "<td>\(inline($0))</td>" }.joined() + "</tr>" }.joined() + "</table>")
+                    let cls: String = page ? " class=\"grid\" cellspacing=\"0\"" : ""
+                    let head: String = rows[0].map { "<th>\(inline($0))</th>" }.joined()
+                    let body: String = rows.dropFirst().map { row -> String in
+                        "<tr>" + row.map { "<td>\(inline($0))</td>" }.joined() + "</tr>"
+                    }.joined()
+                    out.append("<table\(cls)><tr>" + head + "</tr>" + body + "</table>")
                 }
                 continue
             }

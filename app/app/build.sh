@@ -8,8 +8,8 @@ APP="build/$NAME.app"
 
 # PREVIEW=1 ./build.sh makes a build whose screenshot mode (-uiPreview YES …) works; release builds leave it out.
 FLAGS=(); [ "${PREVIEW:-0}" = "1" ] && FLAGS=(-Xswiftc -DE1_PREVIEW)
-swift build -c release --arch arm64 ${FLAGS[@]+"${FLAGS[@]}"}
-BIN="$(swift build -c release --arch arm64 ${FLAGS[@]+"${FLAGS[@]}"} --show-bin-path)/E1Recorder"
+swift build -c release --arch arm64 --arch x86_64 ${FLAGS[@]+"${FLAGS[@]}"}
+BIN="$(swift build -c release --arch arm64 --arch x86_64 ${FLAGS[@]+"${FLAGS[@]}"} --show-bin-path)/E1Recorder"
 
 rm -rf build && mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN" "$APP/Contents/MacOS/E1Recorder"
@@ -105,7 +105,7 @@ E1录音助手 安装说明
 
 项目主页与问题反馈：https://github.com/seabird000/E1Recorder
 TXT
-hdiutil create -volname "$NAME" -srcfolder "$STAGE" -ov -format UDZO "build/E1Recorder-$VERSION.dmg" >/dev/null
+hdiutil create -volname "$NAME" -srcfolder "$STAGE" -ov -format UDZO "build/TingMo-$VERSION.dmg" >/dev/null
 rm -rf "$STAGE"
 echo "built: $APP"
-echo "built: build/E1Recorder-$VERSION.dmg"
+echo "built: build/TingMo-$VERSION.dmg"
