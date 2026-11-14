@@ -95,6 +95,7 @@ final class FeishuPush: NSObject, ObservableObject {
             .init(name: "app_id", value: appId),
             .init(name: "redirect_uri", value: redirect),
             .init(name: "state", value: state),
+            .init(name: "scope", value: "docx:document task:task:write im:message contact:user.base:readonly"),
         ]
         let authURL = comps.url!
 
