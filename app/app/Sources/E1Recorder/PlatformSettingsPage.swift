@@ -58,7 +58,7 @@ struct PlatformSettingsPage: View {
                 LabeledContent("接口地址") {
                     HStack {
                         let ep = s.provider == .custom ? s.customEndpoint : s.endpoint
-                        Trailing(text: s.provider == .custom ? ep.replacingOccurrences(of: "https://", with: "") : URL(string: ep)?.host ?? ep)
+                        Trailing(text: s.provider == .custom ? ep.replacingOccurrences(of: "https://", with: "").replacingOccurrences(of: "http://", with: "") : URL(string: ep)?.host ?? ep)
                         Button("编辑…") { editing = .endpoint }
                     }
                 }
@@ -186,9 +186,9 @@ struct PlatformSettingsPage: View {
                       initial: s.ossEndpoint, validate: { $0.hasSuffix(".aliyuncs.com") && !$0.contains("/") ? nil : "应形如 oss-cn-beijing.aliyuncs.com" },
                       save: { s.ossEndpoint = $0 })
         case .endpoint where s.provider == .custom:
-            EditSheet(title: "编辑接口地址", help: "OpenAI 兼容接口的根地址，一般以 /v1 结尾，例如 https://api.openai.com/v1。",
-                      placeholder: "https://api.openai.com/v1", initial: s.customEndpoint,
-                      validate: { $0.hasPrefix("https://") && URL(string: $0)?.host != nil ? nil : "应以 https:// 开头" },
+            EditSheet(title: "编辑接口地址", help: "OpenAI 兼容接口的根地址，一般以 /v1 结尾。云端如 https://api.openai.com/v1；本地适配层如 http://127.0.0.1:8090/v1。",
+                      placeholder: "http://127.0.0.1:8090/v1", initial: s.customEndpoint,
+                      validate: { ($0.hasPrefix("https://") || $0.hasPrefix("http://")) && URL(string: $0)?.host != nil ? nil : "应以 http:// 或 https:// 开头" },
                       save: { s.customEndpoint = $0.hasSuffix("/") ? String($0.dropLast()) : $0; s.connState = "untested" })
         case .endpoint:
             EditSheet(title: "编辑接口地址", help: "一般不用改。国际站账号可改为 https://dashscope-intl.aliyuncs.com。",
