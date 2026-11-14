@@ -1,23 +1,17 @@
 {
   "version": 2,
-  "status": "example",
-  "mode": "self_only_with_suggestions",
+  "status": "active",
+  "mode": "self_only",
   "delivery": {
     "dingtalk": "本人私信（纪要链接+待办）",
-    "feishu": "应用bot发给本人（纪要链接+任务）",
+    "feishu": "飞书个人（bot 发本人：文档+任务+消息）",
     "auto_group_send": false,
-    "note": "所有纪要只推本人，由本人选择性转发到群；不做任何自动群发"
+    "note": "所有纪要只推本人（飞书个人 / 钉钉私信），绝不自动进任何群；由本人选择性手动转发到群"
   },
   "suggestions": {
-    "note": "仅用于在消息里附一行「建议转发：XX群」提示，不执行发送。以下为示例，替换为你的真实群（ID 用 dws chat +my-groups / lark-cli im chats list 获取）",
+    "note": "本策略不配置任何群（rules 为空），因此不会生成「建议转发」提示，也不存在自动进群。如日后想在个人消息里附带「建议转发：XX群」的手动提示，按真实群名在下方的 rules 中增配即可；任何情况下系统绝不自动向群发送。",
     "match_source": "AI标题+纪要关键词字段+正文；建议可用本地 LLM 对候选群做分类+置信度，低置信不附提示；匹配不上就不附",
     "todo_policy": "推送层二次解析行动项角色：主导或配合（负责人=我）→ 建待办，配合项加[配合]前缀；他人主导且无需我配合 → 只留纪要",
-    "rules": [
-      {"keywords": ["客户A", "项目A"], "platform": "dingtalk", "groups": ["客户A交付群（示例）"]},
-      {"keywords": ["客户B"], "platform": "dingtalk", "groups": ["客户B技术支持群（示例）"]},
-      {"keywords": ["内部项目X"], "platform": "dingtalk", "groups": ["内部项目X群（示例）"]},
-      {"keywords": ["研发周会"], "platform": "feishu", "groups": ["研发中心（示例）"]},
-      {"keywords": ["董事会"], "platform": "feishu", "groups": ["董事会（示例）"]}
-    ]
+    "rules": []
   }
 }
